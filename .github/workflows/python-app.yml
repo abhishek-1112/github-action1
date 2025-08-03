@@ -29,17 +29,35 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # Step 4: List repository contents for debugging
+      # Step 4: List repository contents
       - name: List repository contents
         run: ls -R
 
-      # Step 5: Check test file syntax
+      # Step 5: Display file contents
+      - name: Display math_operations.py content
+        run: cat src/math_operations.py
+
+      - name: Display test_operation.py content
+        run: cat tests/test_operation.py
+
+      # Step 6: Check file permissions
+      - name: Check file permissions
+        run: ls -l tests/test_operation.py src/math_operations.py
+
+      # Step 7: Test imports
+      - name: Test imports
+        run: python -c "from src.math_operations import add, subtract"
+        env:
+          PYTHONPATH: src
+        continue-on-error: true
+
+      # Step 8: Check test file syntax
       - name: Check test file syntax
         run: python tests/test_operation.py
-        continue-on-error: true  # Continue even if syntax check fails
+        continue-on-error: true
 
-      # Step 6: Run tests
+      # Step 9: Run tests
       - name: Run tests
-        run: pytest tests/
+        run: pytest tests/ -v --tb=long
         env:
           PYTHONPATH: src
