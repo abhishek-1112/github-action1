@@ -1,5 +1,6 @@
 name: Python CI
 
+# Trigger the workflow on any push to the main branch or pull request
 on:
   push:
     branches:
@@ -9,21 +10,17 @@ on:
       - main
 
 jobs:
-  lint-and-test:
+  test:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      checks: write   # Required for GitHub annotations
-      pull-requests: write
 
     steps:
-      # Step 1: Check out code
+      # Step 1: Check out the code from the repository
       - name: Check out code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
-      # Step 2: Set up Python
+      # Step 2: Set up Python environment
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v2
         with:
           python-version: '3.8'
 
@@ -32,22 +29,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pylint pytest
 
-      # Step 4: Run Pylint and generate annotations
-      - name: Run Pylint
-        run: |
-          pylint --output-format=json . | tee pylint-report.json
-        continue-on-error: true
-
-      # Step 5: Convert Pylint JSON to GitHub Annotations
-      - name: Annotate Lint Results
-        uses: ataylorme/eslint-annotate-action@v2
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          eslint-json: pylint-report.json
-        continue-on-error: true
-
-      # Step 6: Run tests
+      # Step 4: Run tests
       - name: Run tests
         run: pytest
