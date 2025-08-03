@@ -13,13 +13,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Check out the code from the repository
+      # Step 1: Check out the code
       - name: Check out code
-        uses: actions/checkout@v4  # Update to latest version
+        uses: actions/checkout@v4
 
-      # Step 2: Set up Python environment
+      # Step 2: Set up Python
       - name: Set up Python
-        uses: actions/setup-python@v5  # Update to latest version
+        uses: actions/setup-python@v5
         with:
           python-version: '3.8'
 
@@ -33,6 +33,13 @@ jobs:
       - name: List repository contents
         run: ls -R
 
-      # Step 5: Run tests
+      # Step 5: Check test file syntax
+      - name: Check test file syntax
+        run: python tests/test_operation.py
+        continue-on-error: true  # Continue even if syntax check fails
+
+      # Step 6: Run tests
       - name: Run tests
-        run: pytest tests/  # Specify the test directory
+        run: pytest tests/
+        env:
+          PYTHONPATH: src
