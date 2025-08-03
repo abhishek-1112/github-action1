@@ -1,6 +1,9 @@
 name: Python CI
 
+<<<<<<< HEAD
 # Trigger the workflow on any push to the main branch or pull request
+=======
+>>>>>>> 3e22ae3615a2556614f776bb6e723c0be5be85b6
 on:
   push:
     branches:
@@ -14,6 +17,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+<<<<<<< HEAD
       # Step 1: Check out the code from the repository
       - name: Check out code
         uses: actions/checkout@v2
@@ -21,6 +25,15 @@ jobs:
       # Step 2: Set up Python environment
       - name: Set up Python
         uses: actions/setup-python@v2
+=======
+      # Step 1: Check out the code
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+>>>>>>> 3e22ae3615a2556614f776bb6e723c0be5be85b6
         with:
           python-version: '3.8'
 
@@ -30,6 +43,41 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+<<<<<<< HEAD
       # Step 4: Run tests
       - name: Run tests
         run: pytest
+=======
+      # Step 4: List repository contents
+      - name: List repository contents
+        run: ls -R
+
+      # Step 5: Display file contents
+      - name: Display math_operations.py content
+        run: cat src/math_operations.py
+
+      - name: Display test_operation.py content
+        run: cat tests/test_operation.py
+
+      # Step 6: Check file permissions
+      - name: Check file permissions
+        run: ls -l tests/test_operation.py src/math_operations.py
+
+      # Step 7: Test imports
+      - name: Test imports
+        run: python -c "from src.math_operations import add, subtract"
+        env:
+          PYTHONPATH: src
+        continue-on-error: true
+
+      # Step 8: Check test file syntax
+      - name: Check test file syntax
+        run: python tests/test_operation.py
+        continue-on-error: true
+
+      # Step 9: Run tests
+      - name: Run tests
+        run: pytest tests/ -v --tb=long
+        env:
+          PYTHONPATH: src
+>>>>>>> 3e22ae3615a2556614f776bb6e723c0be5be85b6
